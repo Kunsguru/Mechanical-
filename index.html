@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livewell Housing Solutions Ltd</title>
+    <style>
+        /* Your existing styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            padding: 1em;
+            background-color: #4CAF50;
+            color: white;
+            position: relative;
+            width: 100%;
+            top: 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 80 1px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        section {
+            padding: 2em;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 1em;
+        }
+
+        .thumbnail-gallery {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1em;
+        }
+
+        .thumbnail {
+            width: 30%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .media-content {
+            width: 100%;
+            height: auto;
+            margin-bottom: 1em;
+        }
+
+        .download-link {
+            display: block;
+            margin-top: 0.5em;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .download-link:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: #4CAF50;
+            color: white;
+            position: relative;
+            width: 100%;
+            bottom: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 60px;
+        }
+
+        form label {
+            margin-top: 10px;
+        }
+
+        form input, form textarea {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+        }
+
+        .business-model {
+            display: none;
+            padding: 2em;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        .small-image {
+            width: 20px; /* Adjust the size as needed */
+            height: auto; 
+        }
+
+        .unread-message-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+    </style>
+    <script>
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
+
+        function requestPassword(callback) {
+            const password = prompt('Please enter the password to access this content:');
+            if (password === 'correctPassword') {
+                callback();
+            } else {
+                alert('Incorrect password. Access denied.');
+            }
+        }
+
+        function downloadMedia(url) {
+            requestPassword(() => {
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = url.split('/').pop();
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+
+        function toggleMessageStatus() {
+            const messageButton = document.getElementById('message-button');
+            const messageText = document.getElementById('message-text');
+            const messageIcon = document.getElementById('message-icon');
+            const businessModel = document.getElementById('business-model');
+
+            if (messageText.textContent === 'UNREAD MESSAGE') {
+                messageText.textContent = 'READ MESSAGE';
+                messageIcon.src = '/84tpIkbEsTge4.png!sw800.png';
+                businessModel.style.display = 'block';
+                window.location.href = '#business-model';
+            } else {
+                messageText.textContent = 'UNREAD MESSAGE';
+                messageIcon.src = '/New Message Flat Icon, Email and Website Button Stock Vector - Illustration of favorite, forum_ 91687771.jpeg';
+                businessModel.style.display = 'none';
+                window.location.href = '#about';
+            }
+        }
+
+        window.onload = function() {
+            const messageText = document.getElementById('message-text');
+            messageText.textContent = 'UNREAD MESSAGE';
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const form = document.getElementById('contact-form');
+            const formData = new FormData(form);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const message = formData.get('message');
+            const subject = 'Contact Form Submission';
+            const body = `Name: ${name}\nEmail: ${email}\nMessage: ${message}`;
+
+            const mailtoLink = `mailto:livewell.equity@gmail.com?cc=${email}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        function changeAudioLanguage(language) {
+            const audioSource = document.getElementById('audio-source');
+            const audio = document.getElementById('audio');
+            switch (language) {
+                case 'yoruba':
+                    audioSource.src = '/llv_0_20240720130923-[AudioTrimmer.com].mp3';
+                    break;
+                case 'igbo':
+                    audioSource.src = '/llv_0_20240720130923-[AudioTrimmer.com].mp3';
+                    break;
+                case 'hausa':
+                    audioSource.src = '/llv_0_20240720130923-[AudioTrimmer.com].mp3';
+                    break;
+                case 'pigin':
+                    audioSource.src = '/AAUD-20240720-WA0182..mp3';
+                    break;
+                default:
+                    audioSource.src = '/lv_0_20240720130923-[AudioTrimmer.com].mp3';
+            }
+            audio.load();
+            audio.play();
+        }
+        
+        
+        
+        function requestAdminAccess() {
+            const password = prompt('Please enter the admin password:');
+            if (password === 'adminPassword') {
+                document.getElementById('employment-letters').style.display = 'block'; // Show the section
+            } else {
+                alert('Incorrect password. Access denied.');
+            }
+        }
+
+        
+        function populateSalary() {
+            const position = document.getElementById('position').value;
+            let salary;
+            switch (position) {
+                case 'relationship_officer':
+                    salary = '#100,000 (Commission Based)';
+                    break;
+                case 'community_manager':
+                    salary = '#200,000 (Performance Based)';
+                    break;
+                case 'executive':
+                    salary = '#100,000 (General Manager), #70,000 (Secretary), #80,000 (Account and Risk Assessment Officer), Public Relation Officer (Not Specified)';
+                    break;
+                default:
+                    salary = 'Not Specified';
+            }
+            document.getElementById('salary').value = salary;
+        }
+
+        function generateLetter(event) {
+            event.preventDefault();
+            const form = document.getElementById('employment-form');
+            const fullName = form.full_name.value;
+            const email = form.email.value;
+            const address = form.address.value;
+            const phone = form.phone.value;
+            const position = form.position.value;
+            const salary = form.salary.value;
+            const employmentNo = `EMP-${Date.now()}`; // Simple timestamp-based ID
+
+            const letterContent = `
+                <p>Dear ${fullName},</p>
+                <p>Position of ${position}</p>
+                <p>We are pleased to offer you the position of ${position} at Livewell Housing Solutions Ltd. Your employment number is ${employmentNo}. The salary for your role is ${salary}.</p>
+                <p>Welcome to the team!</p>
+                <p>Sincerely,</p>
+                <p>Livewell Housing Solutions Ltd</p>
+            `;
+
+            document.getElementById('letter-content').innerHTML = letterContent;
+            document.getElementById('letter-output').style.display = 'block';
+        }
+
+        function downloadPDF() {
+            // Implement PDF download functionality
+        }
+        
+        
+        function downloadPDF() {
+            const doc = new jspdf.jsPDF();
+            const content = document.getElementById('letter-content').innerHTML;
+            doc.fromHTML(content, 15, 15, {
+                width: 170,
+            });
+            doc.save('employment_letter.pdf');
+        }
+
+        function goBack() {
+            document.getElementById('letter-output').style.display = 'none';
+        }
+
+        function deleteLetter() {
+            document.getElementById('letter-content').innerHTML = '';
+            document.getElementById('letter-output').style.display = 'none';
+        }
+
+        function sendMail() {
+            const email = document.getElementById('email').value;
+            const mailtoLink = `mailto:mondaykingsley80@gmail.com?cc=${email}&subject=Employment Letter&body=Please find your employment letter attached.`;
+            window.location.href = mailtoLink;
+        }
+        
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Livewell Housing Solutions Ltd</h1>
+        <p><strong>Motto</strong>: <i>...own your tomorrow</i>.</p>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#admin" onclick="requestAdminAccess()">Admin</a></li> <!-- Admin button added -->
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- Admin section -->
+    <section id="employment-letters" style="display: none;">
+        <h2>Employment Letters</h2>
+        <form id="employment-form" onsubmit="generateLetter(event)">
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" name="full_name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" required>
+            <label for="position">Position Applied:</label>
+            <select id="position" name="position" onchange="populateSalary()" required>
+                <option value="relationship_officer">Relationship Officer</option>
+                <option value="community_manager">Community Manager</option>
+                <option value="executive">Executive</option>
+            </select>
+            <label for="salary">Salary:</label>
+            <input type="text" id="salary" name="salary" readonly>
+            <button type="submit">Generate Letter</button>
+        </form>
+        <div id="letter-output" style="display: none;">
+            <h3>Generated Employment Letter</h3>
+            <div id="letter-content"></div>
+            
+            
+            
+            <div class="button-row">
+            <button onclick="submitAndEmailLetter()">Submit</button>
+            <button onclick="downloadLetterAsPDF()">Download PDF</button>
+            <button onclick="closeLetter()">Close</button>
+        </div>
+        
+        
+        </div>
+    </section>
+    
+
+    <section id="home">
+        <h2>Home</h2>
+        <img src="/IMG-20240707-WA0058.jpg" alt="Cover Image" class="cover-image">
+        <p>Your trusted partner in housing solutions.</p>
+    </section>
+    
+    
+
+    <section id="services">
+        <h2>Services</h2>
+        <div class="thumbnail-gallery">
+            <img src="/IMG-20240707-WA0064.jpg" alt="lease plan" class="thumbnail">
+            <img src="/IMG-20240726-WA0127.jpg" alt="community housing cooperative" class="thumbnail">
+            <img src="/IMG-20240708-WA0378.jpg" alt="Ease Rent" class="thumbnail">
+        </div>
+        <ul>
+            <li>Ease Rent</li>
+            <li>Lease Plan</li>
+            <li>Co-operative Community</li>
+            <li>Property Management</li>
+            <li>Real Estate Consultancy</li>
+        </ul>
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <img src="/IMG-20240707-WA0058.jpg" alt="Livewell Housing Solutions Ltd" class="cover-image">
+        <p>Livewell Housing Solutions Ltd is dedicated to providing quality housing solutions and expert advice on property management.</p>
+        
+        <button class="unread-message-button" id="message-button" onclick="toggleMessageStatus()">
+            <span id="message-text">UNREAD MESSAGE</span>
+            <img id="message-icon" src="/New Message Flat Icon, Email and Website Button Stock Vector - Illustration of favorite, forum_ 91687771.jpeg" alt="Unread Message Icon" class="small-image">
+        </button>
+        
+        <section id="business-model" class="business-model">
+<ul>
+    <h1>Livewell Housing Solutions Ltd </h1>
+    <p><strong>motto</strong>: <i>"Own Your Tomorrow"</i></p>
+    </ul>
+
+    <h2>Who We Are:</h2>
+    <p>Livewell Housing Solutions Ltd helps people find, buy, and manage homes. We make sure everyone gets the best place to live.</p>
+
+    <h2>Our Vision:</h2>
+    <p>We want to be the best at providing affordable and smart housing, helping people and communities live happily in their homes.</p>
+
+    <h2>Our Mission:</h2>
+    <p>We aim to change the housing industry by offering various services like managing properties and giving advice on buying homes. We focus on quality and excellent service.</p>
+
+    <h2>What We Do:</h2>
+    <ul>
+        <li><strong>Property Management:</strong> We take care of houses and buildings to make sure they are in good shape and their value increases.</li>
+        <li><strong>Real Estate Consultancy:</strong> We help people make smart decisions when buying or investing in properties.</li>
+        <li><strong>Housing Solutions:</strong> We create affordable and innovative housing options for everyone.</li>
+        <li><strong>Co-operative Community:</strong> We build communities where people work together and support each other.</li>
+        <li><strong>Lease Plans:</strong> We offer flexible renting plans that fit different budgets.</li>
+    </ul>
+
+    <h2>Why Choose Us:</h2>
+    <ul>
+        <li><strong>Expertise:</strong> Our team knows a lot about houses and properties.</li>
+        <li><strong>Innovation:</strong> We always look for new ideas to make our services better.</li>
+        <li><strong>Client-Centric Approach:</strong> We focus on what our clients need and give them special attention.</li>
+        <li><strong>Integrity:</strong> We are honest and fair in everything we do.</li>
+    </ul>
+
+    <h2>Contact Us:</h2>
+   <ul> <p>If you want to know more or need help with housing, contact us at:</p>
+    <p>Address: No 15 Ijegun road, old garage Ikotun.</p>
+    <p>Email: livewell.equity@gmail.com</p>
+    <p>Phone: 08021712005 or 07045786155</p>
+    </ul>
+
+    <p>Livewell Housing Solutions Ltd - Own Your Tomorrow!</p>
+
+
+
+
+
+            
+    </div>
+
+        <div class="button-container">
+            <button onclick="toggleMessageStatus()">Close</button>
+            <button onclick="scrollToTop()">Back to Top</button>
+        </div>
+    </section>
+        
+    </section>
+
+    <section id="media">
+        <h2>Media</h2>
+        <div class="media-content">
+            <h3>Company Overview Video</h3>
+            <video controls onplay="playMedia(this)">
+                <source src="/lv_0_20240727041356_20240727_042323 (1).mp4 " type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <a href="#" onclick="downloadMedia('/lv_0_20240727041356_20240727_042323 (1).mp4' )" class="download-link">Download Video</a>
+        </div>
+        <div class="media-content">
+            <h3> Listen to the Business Model </h3>
+            <audio id="audio" controls onplay="playMedia(this)">
+                <source id="audio-source" src=" " type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+            <a href="#" onclick="downloadMedia(' ')" class="download-link">Download Voice Note</a>
+            <br>
+            <label for="language-select">Select Language:</label>
+            <select id="language-select" onchange="changeAudioLanguage(this.value)">
+                <option value="english">English</option>
+                <option value="yoruba">Yoruba</option>
+                <option value="igbo">Igbo</option>
+                <option value="hausa">Hausa</option>
+                <option value="pigin">Pigin</option>
+            </select>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <form id="contact-form" onsubmit="handleSubmit(event)">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+            
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+    
+    <footer>
+        <p>&copy; 2024 Livewell Housing Solutions Ltd. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
+
