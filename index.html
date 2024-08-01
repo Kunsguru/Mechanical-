@@ -169,6 +169,21 @@
             margin-top: 10px;
         }
         
+        .thumbnail-image {
+        width: 150px; /* Set the width to your desired thumbnail size */
+        height: auto; /* Maintain aspect ratio */
+        border-radius: 5px; /* Optional: rounded corners */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: slight shadow for a nicer effect */
+    
+}
+        
+        
+        #employment-letter-wrapper {
+            display: none;
+            margin-top: 20px;
+        }
+        
+    
     </style>
     <script>
         document.addEventListener('contextmenu', function(event) {
@@ -273,23 +288,37 @@
 
         
         function populateSalary() {
-            const position = document.getElementById('position').value;
-            let salary;
-            switch (position) {
-                case 'relationship_officer':
-                    salary = '#100,000 (Commission Based)';
-                    break;
-                case 'community_manager':
-                    salary = '#200,000 (Performance Based)';
-                    break;
-                case 'executive':
-                    salary = '#100,000 (General Manager), #70,000 (Secretary), #80,000 (Account and Risk Assessment Officer), Public Relation Officer (Not Specified)';
-                    break;
-                default:
-                    salary = 'Not Specified';
-            }
-            document.getElementById('salary').value = salary;
-        }
+    const position = document.getElementById('position').value;
+    let salary;
+    
+    switch (position) {
+        case 'relationship_officer':
+            salary = '#100,000 (Commission Based)';
+            break;
+        case 'community_manager':
+            salary = '#200,000 (Performance Based)';
+            break;
+        case 'executive':
+            salary = '#100,000'; // Default salary for "executive" if no specific role is matched.
+            break;
+        case 'General Manager':
+            salary = '#100,000';
+            break;
+        case 'Secretary':
+            salary = '#70,000';
+            break;
+        case 'Account and Risk Assessment Officer': 
+            salary = '#80,000';
+            break;
+        case 'Public Relation Officer':
+            salary = 'Not Specified';
+            break;
+        default:
+            salary = 'Not Specified';
+    }
+    
+    document.getElementById('salary').value = salary;
+}
 
         function generateLetter(event) {
             event.preventDefault();
@@ -303,46 +332,65 @@
             const employmentNo = `EMP-${Date.now()}`; // Simple timestamp-based ID
 
             const letterContent = `
+           
+            <h2>Employment Offer Letter</h2>
                 <p>Dear ${fullName},</p>
-                <p>Position of ${position}</p>
+                <p>Position of ${position}.</p>
                 <p>We are pleased to offer you the position of ${position} at Livewell Housing Solutions Ltd. Your employment number is ${employmentNo}. The salary for your role is ${salary}.</p>
+                
+                Please find below your details:</p>
+                <ul>
+                    <li><strong>Full Name:</strong> ${fullName}</li>
+                    <li><strong>Email:</strong> ${email}</li>
+                    <li><strong>Address:</strong> ${address}</li>
+                    <li><strong>Phone:</strong> ${phone}</li>
+                    <li><strong>Position:</strong> ${position}</li>
+                    <li><strong>Salary:</strong> ${salary}</li>
+                    <li><strong>Employment No:</strong> ${employmentNo}</li>
+                </ul>
+                <p>Please let us know if you have any questions or require further details.</p>
                 <p>Welcome to the team!</p>
-                <p>Sincerely,</p>
-                <p>Livewell Housing Solutions Ltd</p>
+                <p>Yours Faithfully,</p>
+                <p>Livewell Housing Solutions Ltd </p>
+                <p><img src="/storage/emulated/0/Pictures/Screenshot/Screenshot_20240728-040042.jpg" alt="livewell official" class="thumbnail-image" /></p>
+                    <p>Motto: ... own your tomorrow </p>
+                
+                
             `;
+            
+            
+            
+            
+            
+            
 
             document.getElementById('letter-content').innerHTML = letterContent;
             document.getElementById('letter-output').style.display = 'block';
         }
-
-        function downloadPDF() {
-            // Implement PDF download functionality
-        }
         
         
-        function downloadPDF() {
-            const doc = new jspdf.jsPDF();
-            const content = document.getElementById('letter-content').innerHTML;
-            doc.fromHTML(content, 15, 15, {
-                width: 170,
-            });
-            doc.save('employment_letter.pdf');
-        }
+        
+        function generateAndEmailLetter() {
+            const form = document.getElementById('employment-form');
+            const fullName = form.full_name.value;
+            const email = form.email.value;
+            const letterContent = `
+                Dear ${fullName},\n\n
+                We are pleased to offer you the position of ${form.position.value} at Livewell Housing Solutions Ltd. Your salary is ${form.salary.value}.\n\n
+                Sincerely,\n
+                Livewell Housing Solutions Ltd
+            `;
 
-        function goBack() {
-            document.getElementById('letter-output').style.display = 'none';
-        }
-
-        function deleteLetter() {
-            document.getElementById('letter-content').innerHTML = '';
-            document.getElementById('letter-output').style.display = 'none';
-        }
-
-        function sendMail() {
-            const email = document.getElementById('email').value;
-            const mailtoLink = `mailto:mondaykingsley80@gmail.com?cc=${email}&subject=Employment Letter&body=Please find your employment letter attached.`;
+            const subject = 'Employment Letter from Livewell Housing Solutions Ltd';
+            const mailtoLink = `mailto:mondaykingsley80@gmail.com,${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(letterContent)}`;
             window.location.href = mailtoLink;
         }
+
+        function closeEmploymentLetter() {
+            document.getElementById('employment-letter-wrapper').style.display = 'none';
+        }
+
+        
         
     </script>
 </head>
@@ -362,41 +410,61 @@
     </header>
     
     <!-- Admin section -->
+    	    	
     <section id="employment-letters" style="display: none;">
-        <h2>Employment Letters</h2>
+
+        
         <form id="employment-form" onsubmit="generateLetter(event)">
-            <label for="full_name">Full Name:</label>
-            <input type="text" id="full_name" name="full_name" required>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address" required>
-            <label for="phone">Phone:</label>
-            <input type="tel" id="phone" name="phone" required>
-            <label for="position">Position Applied:</label>
-            <select id="position" name="position" onchange="populateSalary()" required>
-                <option value="relationship_officer">Relationship Officer</option>
-                <option value="community_manager">Community Manager</option>
-                <option value="executive">Executive</option>
-            </select>
-            <label for="salary">Salary:</label>
-            <input type="text" id="salary" name="salary" readonly>
-            <button type="submit">Generate Letter</button>
-        </form>
+                <label for="full_name">Full Name:</label>
+                <input type="text" id="full_name" name="full_name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" name="phone" required>
+
+                
+
+<label for="position">Position:</label>
+<select id="position" name="position" onchange="populateSalary()" required>
+	<option value="select job position">Select Job Offering</option>
+    <option value="relationship_officer">Relationship Officer</option>
+    <option value="community_manager">Community Manager</option>
+    <option value="General Manager">General Manager (Executive)</option>
+    <option value="Secretary">Secretary (Executive)</option>
+    <option value="Account and Risk Assessment Officer">Account and Risk Assessment Officer (Executive)</option>
+    <option value="Public Relation Officer">Public Relation Officer (Executive)</option>
+    <option value="executive">Other Executive</option>
+</select>
+<label for="salary">Salary:</label>
+                <input type="text" id="salary" name="salary" readonly>
+
+                <button type="submit">Submit</button>
+            </form>
         <div id="letter-output" style="display: none;">
-            <h3>Generated Employment Letter</h3>
+         
+     
             <div id="letter-content"></div>
             
             
             
             <div class="button-row">
-            <button onclick="submitAndEmailLetter()">Submit</button>
-            <button onclick="downloadLetterAsPDF()">Download PDF</button>
-            <button onclick="closeLetter()">Close</button>
+            
+            
+            
+            <button type="button" onclick="generateAndEmailLetter()">Send</button>
+                    <button type="button" onclick="closeEmploymentLetter()">Close</button>
+            
+            
         </div>
         
         
         </div>
+        
     </section>
     
 
@@ -540,5 +608,7 @@
     </footer>
 </body>
 </html>
+
+
 
 
